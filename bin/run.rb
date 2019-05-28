@@ -3,33 +3,55 @@ require 'rest-client'
 require 'JSON'
 require 'pry'
 
+current_user
+
 def run
   welcome
   # grab_book_info
+end
+
+def list
+  puts "1. Search"
+  puts "2. View your checkouts"
+  puts "3. Exit"
+  task = gets.chomp
+  action(task)
 end
 
 def welcome
   puts "Welcome to BookWorm!"
   puts "What is your name?"
   name = gets.chomp
-  create_or_find_user(name)
+  current_user = User.find_or_create_by(name)
   puts "Hello #{name}!"
   puts "What would you like to do?"
-  task = gets.chomp
-  action(task)
+  list
 end
 
 def action(input)
-  # case input
-  if input == "1"
-    puts "What book would you like to checkout?"
+  case input
+    when "1"
+      puts "What book are you looking for?"
       book_query = gets.chomp
-    search_for_book(book_query)
+      book = search_for_book(book_query)
+      puts "This Book is available to checkout! Would you like to check it out? [y,n]"
+      input = gets.chomp
+      case input
+      when "y"
+        checkout(current_user, book)
+      when "n"
+        list
+      end
+    when "2"
+      books = current_user.books_checked_out
+      books.each do |book|
+        show_book(book)
+        puts "-----------"
+      end
+      list
+    when "3"
+      exit
   end
-end
-
-def create_or_find_user(name)
-  User.find_or_create_by(name: name)
 end
 
 # def most_popular
@@ -56,8 +78,11 @@ def search_for_book(book)
 end
 
 def show_book(book)
-  Book.find_by(title: book)
-  # puts " "
+  # binding.pry
+  puts "Title: #{book.title}"
+  puts "  Author: #{book.author}"
+  puts "  Category: #{book.category}"
+  puts "  Page Count: #{book.page_count}"
 end
 
 def grab_book_info(book)
