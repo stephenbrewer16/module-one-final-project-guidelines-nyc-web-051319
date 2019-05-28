@@ -4,12 +4,20 @@ require 'JSON'
 
 def run
   welcome
-  grab_book_info
+  # grab_book_info
 end
 
 def welcome
-  puts "Welcome to BookWorm"
+  puts "Welcome to BookWorm!"
+  puts "What is your name?"
+  name = gets.chomp
+  create_or_find_user(name)
+  puts "Hello #{name}!"
   puts "What would you like to do?"
+end
+
+def create_or_find_user(name)
+  User.find_or_create_by(name: name)
 end
 
 def search_for_book
@@ -37,5 +45,5 @@ def create_book
 end
 
 
-create_book 
+run
 # puts "HELLO WORLD"
