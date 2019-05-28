@@ -1,2 +1,2 @@
-class Checkout < ActiveRecord :: Base
+class Checkout < ActiveRecord::Base
 end
