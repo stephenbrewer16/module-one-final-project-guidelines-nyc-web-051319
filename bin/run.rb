@@ -106,6 +106,7 @@ def checkout(user, book)
   Checkout.create(user_id: user.id, book_id: book.id)
 end
 
+
 run
 # puts most_popuar
 # add_to_wishlist("mendel", "Harry Potter and the Cursed Child – Parts One and Two (Special Rehearsal Edition)")
