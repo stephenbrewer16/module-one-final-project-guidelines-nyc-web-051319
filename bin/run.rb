@@ -26,6 +26,7 @@ def search_for_book
   result = JSON.parse(query)
 end
 
+
 def grab_book_info
   data = search_for_book
   books = data["items"]
@@ -43,6 +44,7 @@ def create_book
   book_hash = grab_book_info
   Book.create(book_hash)
 end
+
 
 
 run
