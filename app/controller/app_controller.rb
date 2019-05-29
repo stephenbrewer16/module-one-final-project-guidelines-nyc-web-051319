@@ -16,7 +16,7 @@ class ApplicationController
 
 
   def welcome
-    # display_bookworm
+    display_bookworm
     puts "Welcome to BookWorm!"
     puts "What is your name?"
     name = gets.chomp
@@ -41,6 +41,7 @@ class ApplicationController
     puts  "    // ~ ~ ~~ | ~~~ ~~ \\\\    "
     puts  "   //________.|.________\\\\   "
     puts  "  '----------'-'----------'    "
+
   end
 
   def search_for_book_option
@@ -51,7 +52,7 @@ class ApplicationController
   end
 
   def confirm_search
-    puts "Did you find the book you are searching for? [y,n]"
+    puts "Did you find the book you are searching for? [y,n]".colorize(:color => :blue, :background => :white)
     input = gets.chomp
     case input
     when "y"
