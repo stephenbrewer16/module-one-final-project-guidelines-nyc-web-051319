@@ -1,6 +1,6 @@
 class Book < ActiveRecord::Base
-  has_many :checkout
-  has_many :users, through: :checkout
+  has_many :checkouts
+  has_many :users, through: :checkouts
 
-  
+
 end

@@ -94,14 +94,14 @@ class ApplicationController
   end
 
   def all_checkouts
-    books = @current_user.books_checked_out
-    books.each_with_index do |book, index|
+    novels = @current_user.books
+    novels.each_with_index do |book, index|
       new_index = index + 1
       book.update(index: new_index)
       puts "Book index: #{new_index}"
       show_book(book)
-      puts "Checkout date: #{book.checkout[0].checkout_date}"
-      puts "Return date: #{book.checkout[0].return_date}"
+      # puts "Checkout date: #{book.checkouts[:checkout_date]}"
+      # puts "Return date: #{book.checkouts[:return_date]}"
       puts "--------------"
     end
   end
@@ -110,7 +110,7 @@ class ApplicationController
     book_record = Book.find_by(title: book[:title])
     if book_record && !book_record.available
       unavailable_book = Book.find_by(title: book[:title])
-      puts "Sorry! This book is checked out until #{book_record.checkout[0].return_date}".colorize(:red)
+      puts "Sorry! This book is checked out until #{book_record.checkouts.return_date}".colorize(:red)
       list
     elsif book_record && book_record.available
       checkout(@current_user, book_record)
@@ -184,7 +184,7 @@ class ApplicationController
   def checkout(current_user, book)
     checked_book = Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7)
     checked_book.book.update(available: false)
-    puts "You now have #{book.title} checked out!"
+    puts "You now have #{book.title} checked out!".colorize(:color => :purple, :background => :green)
     list
   end
 
