@@ -3,7 +3,7 @@ require 'rest-client'
 require 'JSON'
 require 'pry'
 
-current_user
+# current_user
 
 def run
   welcome
@@ -22,7 +22,7 @@ def welcome
   puts "Welcome to BookWorm!"
   puts "What is your name?"
   name = gets.chomp
-  current_user = User.find_or_create_by(name)
+  # current_user = User.find_or_create_by(name)
   puts "Hello #{name}!"
   puts "What would you like to do?"
   list
@@ -38,12 +38,12 @@ def action(input)
       input = gets.chomp
       case input
       when "y"
-        checkout(current_user, book)
+        # checkout(current_user, book)
       when "n"
         list
       end
     when "2"
-      books = current_user.books_checked_out
+      # books = current_user.books_checked_out
       books.each do |book|
         show_book(book)
         puts "-----------"
@@ -59,7 +59,19 @@ end
 # end
 def find_book_in_api(book)
   query = RestClient.get("https://www.googleapis.com/books/v1/volumes?q=#{book}")
-  result = JSON.parse(query)
+  string = query.body
+  result = JSON.parse(string)
+  titles = result["items"]
+  titles.each do |book|
+    title = book["volumeInfo"]["title"]
+    puts title
+    author = book["volumeInfo"]["authors"].join(" & ")
+    puts author
+    category = book["volumeInfo"]["categories"].join(" ")
+    puts category
+    page_count = book["volumeInfo"]["pageCount"].to_i
+    puts page_count
+  end
   if result["totalItems"] == 0
     puts "Sorry :( We have no record of this book. Please try again..."
   else
@@ -89,7 +101,7 @@ def grab_book_info(book)
   # binding.pry
   books = book["items"]
   book_hash = {}
-  books.find do |book|
+  books.each do |book|
     book_hash[:title] = book["volumeInfo"]["title"]
     book_hash[:author] = book["volumeInfo"]["authors"].join(" & ")
     book_hash[:category] = book["volumeInfo"]["categories"].join(" ")
