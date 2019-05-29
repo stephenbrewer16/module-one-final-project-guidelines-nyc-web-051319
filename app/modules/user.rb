@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   has_many :books, through: :checkouts
 
   def books_checked_out
-    self.books
+    self.checkout.map { |co| co.book}
   end
 
   def return_book(index)
