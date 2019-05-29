@@ -6,6 +6,7 @@ class CreateBookTable < ActiveRecord::Migration[5.0]
       t.string :author
       t.string :category
       t.integer :page_count
+      t.boolean :available
     end
   end
 end

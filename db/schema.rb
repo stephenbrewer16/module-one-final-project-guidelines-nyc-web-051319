@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20190528154117) do
     t.string  "author"
     t.string  "category"
     t.integer "page_count"
+    t.boolean "available"
   end
 
   create_table "checkouts", force: :cascade do |t|
