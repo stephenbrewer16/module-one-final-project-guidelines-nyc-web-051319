@@ -87,7 +87,8 @@ class ApplicationController
 
   def checkout_option(book)
     if Book.find_by(title: book[:title])
-      puts "Sorry! This book is checked out."
+    unavailable_book = Book.find_by(title: book[:title])
+      puts "Sorry! This book is checked out until #{unavailable_book.checkout[0].return_date}"
     else
       book_row = create_book(book)
       puts "This Book is available to checkout! Would you like to check it out? [y,n]"
@@ -156,7 +157,8 @@ class ApplicationController
   end
 
   def checkout(current_user, book)
-    Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7 )
+    checked_book = Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7 )
+    checked_book.book.update(available: false)
     puts "You now have #{book.title} checked out!"
     list
   end
