@@ -8,7 +8,8 @@ class ApplicationController
     puts "What would you like to do?"
     puts "1. Search"
     puts "2. View your checkouts"
-    puts "3. Exit"
+    puts "3. Return Book"
+    puts "4. Exit"
     task = gets.chomp
     action(task)
   end
@@ -67,31 +68,50 @@ class ApplicationController
     end
   end
 
+
   def action(input)
     case input
       when "1"
         search_for_book_option
       when "2"
-        books = @current_user.books_checked_out
-        books.each do |book|
-          show_book(book)
-          puts "Checkout date: #{book.checkout[0].checkout_date}"
-          puts "Return date: #{book.checkout[0].return_date}"
-          puts "-----------"
-        end
+        all_checkouts
         list
       when "3"
+        all_checkouts
+        puts "Please select index of book you would like to return (1-#{all_checkouts.length})".colorize(:red)
+        index = gets.chomp.to_i
+        returned_book = @current_user.return_book(index)
+        puts "You have successfully returned #{returned_book}."
+      when "4"
         exit
       end
   end
 
+  def all_checkouts
+    books = @current_user.books_checked_out
+    books.each_with_index do |book, index|
+      # binding.pry
+      new_index = index + 1
+      book.update(index: new_index)
+      puts "Book index: #{new_index}"
+      show_book(book)
+      puts "Checkout date: #{book.checkout[0].checkout_date}"
+      puts "Return date: #{book.checkout[0].return_date}"
+      puts "--------------"
+    end
+  end
+
   def checkout_option(book)
-    if Book.find_by(title: book[:title])
-    unavailable_book = Book.find_by(title: book[:title])
-      puts "Sorry! This book is checked out until #{unavailable_book.checkout[0].return_date}"
+    book_record = Book.find_by(title: book[:title])
+    if book_record && !book_record.available
+      unavailable_book = Book.find_by(title: book[:title])
+      puts "Sorry! This book is checked out until #{book_record.checkout[0].return_date}".colorize(:red)
+      list
+    elsif book_record && book_record.available
+      checkout(@current_user, book_record)
     else
       book_row = create_book(book)
-      puts "This Book is available to checkout! Would you like to check it out? [y,n]"
+      puts "This Book is available to checkout! Would you like to check it out? [y,n]".colorize(:green)
       input = gets.chomp
       case input
       when "y"
@@ -116,7 +136,7 @@ class ApplicationController
         book_hash = grab_book_info(book, new_index)
         @book_hashes << book_hash
         show_book(book_hash)
-        puts "-----------"
+        puts "--------------"
       end
     end
   end
@@ -157,7 +177,7 @@ class ApplicationController
   end
 
   def checkout(current_user, book)
-    checked_book = Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7 )
+    checked_book = Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7)
     checked_book.book.update(available: false)
     puts "You now have #{book.title} checked out!"
     list
