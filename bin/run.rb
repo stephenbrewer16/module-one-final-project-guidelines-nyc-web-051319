@@ -34,6 +34,10 @@ def action(input)
       puts "What book are you looking for?"
       book_query = gets.chomp
       book = search_for_book(book_query)
+    end
+      puts "Do you see the book you are searching for?"
+      case input
+      when "y"
       puts "This Book is available to checkout! Would you like to check it out? [y,n]"
       input = gets.chomp
       case input
@@ -62,22 +66,31 @@ def find_book_in_api(book)
   string = query.body
   result = JSON.parse(string)
   titles = result["items"]
-  titles.each do |book|
+  titles.each do |book, index|
+    book.index + 1
     title = book["volumeInfo"]["title"]
-    puts title
-    author = book["volumeInfo"]["authors"].join(" & ")
-    puts author
+    author_info = book["volumeInfo"]["authors"]
+    if author_info
+      author = author_info.join(" & ")
+    else
+      author = "An Author has no name"
+    end
     category = book["volumeInfo"]["categories"].join(" ")
-    puts category
     page_count = book["volumeInfo"]["pageCount"].to_i
-    puts page_count
+
+    puts [index]
+    puts "Title: #{title}"
+    puts "Author: #{author}"
+    puts "Category: #{category}"
+    puts "Page Count: #{page_count}"
+    puts "*********************************************"
   end
   if result["totalItems"] == 0
     puts "Sorry :( We have no record of this book. Please try again..."
-  else
-    book_hash = grab_book_info(result)
-    create_book(book_hash)
-    # show_book(book)
+    # else
+    #   book_hash = grab_book_info(result)
+    #   create_book(book_hash)
+    #   # show_book(book)
   end
 end
 
@@ -97,18 +110,18 @@ def show_book(book)
   puts "  Page Count: #{book.page_count}"
 end
 
-def grab_book_info(book)
-  # binding.pry
-  books = book["items"]
-  book_hash = {}
-  books.each do |book|
-    book_hash[:title] = book["volumeInfo"]["title"]
-    book_hash[:author] = book["volumeInfo"]["authors"].join(" & ")
-    book_hash[:category] = book["volumeInfo"]["categories"].join(" ")
-    book_hash[:page_count] = book["volumeInfo"]["pageCount"].to_i
-  end
-  book_hash
-end
+# def grab_book_info(book)
+#   # binding.pry
+#   books = book["items"]
+#   book_hash = {}
+#   books.each do |book|
+#     book_hash[:title] = book["volumeInfo"]["title"]
+#     book_hash[:author] = book["volumeInfo"]["authors"].join(" & ")
+#     book_hash[:category] = book["volumeInfo"]["categories"].join(" ")
+#     book_hash[:page_count] = book["volumeInfo"]["pageCount"].to_i
+#   end
+#   book_hash
+# end
 
 def create_book(book_hash)
   Book.create(book_hash)
