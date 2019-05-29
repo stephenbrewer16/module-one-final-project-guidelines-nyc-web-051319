@@ -2,8 +2,13 @@ class User < ActiveRecord::Base
   has_many :checkouts
   has_many :books, through: :checkouts
 
+  # def books_checked_out
+  #   self.books
+  # end
+
   def books_checked_out
-    self.checkout.map { |co| co.book}
+    # binding.pry
+    self.checkouts.map {|co| co.book}
   end
 
   def return_book(index)
