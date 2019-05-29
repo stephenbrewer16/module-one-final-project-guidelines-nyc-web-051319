@@ -25,7 +25,7 @@ class ApplicationController
       puts "Welcome back #{name}!"
     else
       @current_user = User.create(name: name)
-      puts "Hello #{name}!"
+      puts "Welcome to BookWorm #{name}!"
     end
     list
   end
