@@ -58,9 +58,8 @@ def confirm_search
   when "y"
     puts "Please select index of book you would like to checkout (1-10)"
     index = gets.chomp
-    find_book_by_index(index)
-    binding.pry
-    checkout_option(index)
+    book = find_book_by_index(index)
+    checkout_option(book)
   when "n"
     puts "Please be more specific in your search"
     search_for_book_option
@@ -91,8 +90,7 @@ def action(input)
 end
 
 def checkout_option(index)
-
-  create_book(index)
+  create_book(book)
   puts "This Book is available to checkout! Would you like to check it out? [y,n]"
   input = gets.chomp
   case input
