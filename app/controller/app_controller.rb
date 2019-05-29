@@ -16,12 +16,17 @@ class ApplicationController
 
 
   def welcome
+    # display_bookworm
     puts "Welcome to BookWorm!"
     puts "What is your name?"
     name = gets.chomp
-    @current_user = User.find_or_create_by(name: name)
-    puts "Hello #{name}!"
-
+    if User.find_by(name: name)
+      @current_user = User.find_by(name: name)
+      puts "Welcome back #{name}!"
+    else
+      @current_user = User.create(name: name)
+      puts "Hello #{name}!"
+    end
     list
   end
 
@@ -55,7 +60,7 @@ class ApplicationController
       book = find_book_by_index(index)
       checkout_option(book)
     when "n"
-      puts "Please be more specific in your search!"
+      puts "Please be more specific in your search!".colorize(:green)
       search_for_book_option
     end
   end
@@ -67,7 +72,6 @@ class ApplicationController
       end
     end
   end
-
 
   def action(input)
     case input
@@ -81,7 +85,8 @@ class ApplicationController
         puts "Please select index of book you would like to return (1-#{all_checkouts.length})".colorize(:red)
         index = gets.chomp.to_i
         returned_book = @current_user.return_book(index)
-        puts "You have successfully returned #{returned_book}."
+        puts "You have successfully returned #{returned_book}.".colorize(:green)
+        list
       when "4"
         exit
       end
@@ -90,7 +95,6 @@ class ApplicationController
   def all_checkouts
     books = @current_user.books_checked_out
     books.each_with_index do |book, index|
-      # binding.pry
       new_index = index + 1
       book.update(index: new_index)
       puts "Book index: #{new_index}"
