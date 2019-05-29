@@ -2,7 +2,7 @@ require_relative '../config/environment'
 require 'rest-client'
 require 'JSON'
 require 'pry'
-
+require 'date'
 # current_user
 # display_bookworm
 
@@ -57,7 +57,7 @@ def confirm_search
   case input
   when "y"
     puts "Please select index of book you would like to checkout (1-10)"
-    index = gets.chomp
+    index = gets.chomp.to_i
     book = find_book_by_index(index)
     checkout_option(book)
   when "n"
@@ -68,8 +68,9 @@ end
 
 def find_book_by_index(index)
   @book_hashes.find do |book|
-    book[:index] == index
+    if book[:index] == index
       book
+    end
   end
 end
 
@@ -81,6 +82,8 @@ def action(input)
       books = @current_user.books_checked_out
       books.each do |book|
         show_book(book)
+        puts "Checkout date: #{book.checkout[0].checkout_date}"
+        puts "Return date: #{book.checkout[0].return_date}"
         puts "-----------"
       end
       list
@@ -89,15 +92,19 @@ def action(input)
     end
 end
 
-def checkout_option(index)
-  create_book(book)
-  puts "This Book is available to checkout! Would you like to check it out? [y,n]"
-  input = gets.chomp
-  case input
-  when "y"
-    checkout(@current_user, book)
-  when "n"
-    list
+def checkout_option(book)
+  if Book.find_by(title: book[:title])
+    puts "Sorry! This book is checked out."
+  else
+    book_row = create_book(book)
+    puts "This Book is available to checkout! Would you like to check it out? [y,n]"
+    input = gets.chomp
+    case input
+    when "y"
+      checkout(@current_user, book_row)
+    when "n"
+      list
+    end
   end
 end
 
@@ -165,8 +172,8 @@ def create_book(book_hash)
 end
 
 def checkout(current_user, book)
-  binding.pry
-  Checkout.create(user_id: current_user.id, book_id: book.id)
+  Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7 )
+  puts "You now have #{book.title} checked out!"
 end
 
 

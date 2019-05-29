@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 20190528154117) do
 
   create_table "books", force: :cascade do |t|
+    t.integer "index"
     t.string  "title"
     t.string  "author"
     t.string  "category"
