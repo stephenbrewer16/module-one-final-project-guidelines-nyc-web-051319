@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
     books = self.checkouts.select do |co|
       co.return_date < DateTime.now
     end
-    binding.pry
   end
 
   def return_book(index)

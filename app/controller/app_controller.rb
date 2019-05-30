@@ -23,7 +23,7 @@ class ApplicationController
     puts "What is your name?"
     name = gets.chomp
     if User.find_by(name: name.downcase)
-      @current_user = User.find_by(name: name)
+      @current_user = User.find_by(name: name.downcase)
       puts "Welcome back #{name}!"
     else
       @current_user = User.create(name: name.downcase)
@@ -81,13 +81,13 @@ class ApplicationController
       when "1"
         search_for_book_option
       when "2"
-        if @current_user.reload.books.empty?
+        if @current_user.books.empty?
           puts "You have no books checked out".colorize(:red)
         end
         all_checkouts
         menu
       when "3"
-        if @current_user.reload.books.empty?
+        if @current_user.books.empty?
           puts "You have no books checked out".colorize(:red)
           menu
         else
@@ -117,13 +117,10 @@ class ApplicationController
   end
 
   def all_checkouts
-    # binding.pry
     novels = @current_user.reload.books
     novels.each_with_index do |book, index|
       new_index = index + 1
-      # binding.pry
       book.update(index: new_index)
-      # binding.pry
       puts "Book index: #{new_index}"
       show_book(book)
       puts "  Checkout date: #{book.checkouts[0].checkout_date}"
@@ -211,9 +208,7 @@ class ApplicationController
   end
 
   def checkout(current_user, book)
-    # binding.pry
     checked_book = Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7)
-    # binding.pry
     checked_book.book.update(available: false)
     puts "You now have #{book.title} checked out!".colorize(:color => :purple, :background => :green)
   end
