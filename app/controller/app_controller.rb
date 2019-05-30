@@ -12,7 +12,6 @@ class ApplicationController
     puts "3. Return Book"
     puts "4. Return all Books"
     puts "5. Exit"
-    puts "6. Overdue books"
     task = gets.chomp
     action(task)
   end
@@ -56,12 +55,12 @@ class ApplicationController
     puts "Did you find the book you are searching for? (Y/n)".colorize(:color => :blue, :background => :white)
     input = gets.chomp
     case input
-    when "y"
+    when -> result { result.downcase == "yes" || result.downcase == "y" }
       puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
       index = gets.chomp.to_i
       book = find_book_by_index(index)
       checkout_option(book)
-    when "n"
+    when -> result { result.downcase == "no" || result.downcase == "n" }
       puts "Please be more specific in your search!".colorize(:green)
       search_for_book_option
     end
@@ -103,24 +102,22 @@ class ApplicationController
           menu
         else
           @current_user.return_all
+          puts "You have successfully returned all books.".colorize(:green)
           menu
         end
       when "5"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
       when "6"
-        @current_user.overdue_books
+        puts Book.most_popular.title
       end
   end
 
   def all_checkouts
-    # binding.pry
     novels = @current_user.reload.books
     novels.each_with_index do |book, index|
       new_index = index + 1
-      # binding.pry
       book.update(index: new_index)
-      # binding.pry
       puts "Book index: #{new_index}"
       show_book(book)
       puts "  Checkout date: #{book.checkouts[0].checkout_date}"
@@ -143,10 +140,10 @@ class ApplicationController
       puts "This Book is available to checkout! Would you like to check it out? (Y/n)".colorize(:green)
       input = gets.chomp
       case input
-      when "y"
+      when -> result { result.downcase == "yes" || result.downcase == "y" }
         checkout(@current_user, book_row)
         menu
-      when "n"
+      when -> result { result.downcase == "no" || result.downcase == "n" }
         menu
       end
     end
@@ -208,9 +205,7 @@ class ApplicationController
   end
 
   def checkout(current_user, book)
-    # binding.pry
     checked_book = Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7)
-    # binding.pry
     checked_book.book.update(available: false)
     puts "You now have #{book.title} checked out!".colorize(:color => :purple, :background => :green)
   end
