@@ -31,6 +31,7 @@ class ApplicationController
     menu
   end
 
+
   def display_bookworm
 
 puts "
@@ -155,7 +156,6 @@ MMMXxcclcllcld0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
         exit
     end
   end
-
 
   def all_checkouts
     novels = @current_user.reload.books

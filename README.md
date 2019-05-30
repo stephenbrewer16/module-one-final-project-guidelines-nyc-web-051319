@@ -1,59 +1,54 @@
-# Module One Final Project Guidelines
+# BookWorm
 
-Congratulations, you're at the end of module one! You've worked crazy hard to get here and have learned a ton.
+Welcome to BookWorm!
 
-For your final project, we'll be building a Command Line database application.
+The BookWorm app allows you to search through a vast collection of books and other reading materials that you can checkout for your reading pleasure.
 
-## Project Requirements
+You can view all of the books in your current possession with active return by dates.
 
-### Option One - Data Analytics Project
+Our app also allows you to return one book at a time, or even all of your books in a single instance.  Wow, you must be a fast reader!
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have at minimum three models including one join model. This means you must have a many-to-many relationship.
-3. You should seed your database using data that you collect either from a CSV, a website by scraping, or an API.
-4. Your models should have methods that answer interesting questions about the data. For example, if you've collected info about movie reviews, what is the most popular movie? What movie has the most reviews?
-5. You should provide a CLI to display the return values of your interesting methods.  
-6. Use good OO design patterns. You should have separate classes for your models and CLI interface.
+If you're feeling spontaneous, you can use our random book generator to produce a random book from the library!
 
-  **Resource:** [Easy Access APIs](https://github.com/learn-co-curriculum/easy-access-apis)
+Beware a user cannot checkout a book that has been checked out by another user.  However, we will provide you with a date indicating when the book has to be returned by.
 
-### Option Two - Command Line CRUD App
+Our library allows you keep the book for 7 days before it needs to be returned.  Once returned it will become available again for all users.
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have a minimum of three models.
-3. You should build out a CLI to give your user full CRUD ability for at least one of your resources. For example, build out a command line To-Do list. A user should be able to create a new to-do, see all todos, update a todo item, and delete a todo. Todos can be grouped into categories, so that a to-do has many categories and categories have many to-dos.
-4. Use good OO design patterns. You should have separate models for your runner and CLI interface.
+The BookWorm app aims to make your book searching journey much more pleasant.  Why drag confuse yourself with the Dewey Decimal system, when you can just use our app!
 
-### Brainstorming and Proposing a Project Idea
 
-Projects need to be approved prior to launching into them, so take some time to brainstorm project options that will fulfill the requirements above.  You must have a minimum of four [user stories](https://en.wikipedia.org/wiki/User_story) to help explain how a user will interact with your app.  A user story should follow the general structure of `"As a <role>, I want <goal/desire> so that <benefit>"`. In example, if we were creating an app to randomly choose nearby restaurants on Yelp, we might write:
 
-* As a user, I want to be able to enter my name to retrieve my records
-* As a user, I want to enter a location and be given a random nearby restaurant suggestion
-* As a user, I should be able to reject a suggestion and not see that restaurant suggestion again
-* As a user, I want to be able to save to and retrieve a list of favorite restaurant suggestions
+## How to Use BookWorm
 
-## Instructions
+### Hint - IT'S EASY!
+  Once the BookWorm application is started it will prompt you to enter your name.  This allows us to keep track of your checkout history, as well as, the books you have currently active in your checkout cart.
 
-1. Fork and clone this repository.
-2. Build your application. Make sure to commit early and commit often. Commit messages should be meaningful (clearly describe what you're doing in the commit) and accurate (there should be nothing in the commit that doesn't match the description in the commit message). Good rule of thumb is to commit every 3-7 mins of actual coding time. Most of your commits should have under 15 lines of code and a 2 line commit is perfectly acceptable.
-3. Make sure to create a good README.md with a short description, install instructions, a contributors guide and a link to the license for your code.
-4. Make sure your project checks off each of the above requirements.
-5. Prepare a video demo (narration helps!) describing how a user would interact with your working project.
-    * The video should:
-      - Have an overview of your project.(2 minutes max)
-6. Prepare a presentation to follow your video.(3 minutes max)
-    * Your presentation should:
-      - Describe something you struggled to build, and show us how you ultimately implemented it in your code.
-      - Discuss 3 things you learned in the process of working on this project.
-      - Address, if anything, what you would change or add to what you have today?
-      - Present any code you would like to highlight.   
-7. *OPTIONAL, BUT RECOMMENDED*: Write a blog post about the project and process.
+  You will see a list of commands to choose from.  These commands are what make our app so easy to use.
 
----
-### Common Questions:
-- How do I turn off my SQL logger?
-```ruby
-# in config/environment.rb add this line:
-ActiveRecord::Base.logger = nil
-```
+    1. Search
+    2. View your checkouts
+    3. Return Book
+    4. Return all Books
+    5. Choose a random book for me
+    6. Exit
+
+
+
+1. Searching for a book will ask you to type in the title of the book you are looking for.  Entering this search will return a list of 10 books to choose from.
+Don't worry, if you do not see the book you are searching for, you can search again with more specific keywords.
+
+    EX: Searching Harry Potter
+      VS.
+    Searching Harry Potter Azkaban
+
+  Once you see the book you are searching for on the list, please select the appropriate index associated with that book.  This will check the books availability - if it is checked out, sorry, you will not be able to check it out until the user reading it has returned it.  We allow 7 days per checkout of a book, so if you want to check it out again you want to be quick.
+
+2. The app also allows you to view your current list of checked out books.  This list comes fully equipt with a checkout and return date to ensure you get your books back on time.
+
+3. Our return book command will give you the opportunity to return a book on your own schedule.  By simply selecting the index number of the book taken from your view checkouts cart.  You can return the book making it available for other users.  Thank you for your punctuality :)
+
+4. If you're in a rush, our return all command gives you the power to return all of your books at once.  Have to go on vacation somewhere? Return all!  On the run from the feds and don't want a late fee? Return all! Qualifying for the Jamaican bobsled team and need to catch a plane to calgary?  Return All!  It's that easy!
+
+5.  Feelin' Lucky?  Give our random book generator a go!  This feature will pluck a random book from the google books database and give you the option to check it out if you'd like.  Feel free to mash this button as many times as you'd like.
+
+Last, but most importantly, HAVE FUN.  This app is meant to explore the plethora of literature available to us through the google books library.  Remember to check the page count though.  You wouldn't want to start off reading a 1,200 page book!  Start out wherever you feel comfortable and get reading!
