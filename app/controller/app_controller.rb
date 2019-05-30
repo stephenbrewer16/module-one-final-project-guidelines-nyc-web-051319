@@ -1,5 +1,4 @@
 class ApplicationController
-
   def run
     welcome
   end
@@ -9,18 +8,18 @@ class ApplicationController
     puts "1. Search"
     puts "2. View your checkouts"
     puts "3. Return Book"
-    puts "4. Exit"
+    puts "4. Return all Books"
+    puts "5. Exit"
     task = gets.chomp
     action(task)
   end
-
 
   def welcome
     display_bookworm
     puts "Welcome to BookWorm!"
     puts "What is your name?"
     name = gets.chomp
-    if User.find_by(name: name)
+    if User.find_by(name: name.downcase)
       @current_user = User.find_by(name: name)
       puts "Welcome back #{name}!"
     else
@@ -52,7 +51,7 @@ class ApplicationController
   end
 
   def confirm_search
-    puts "Did you find the book you are searching for? [y,n]".colorize(:color => :blue, :background => :white)
+    puts "Did you find the book you are searching for? (Y/n)".colorize(:color => :blue, :background => :white)
     input = gets.chomp
     case input
     when "y"
@@ -79,52 +78,69 @@ class ApplicationController
       when "1"
         search_for_book_option
       when "2"
-        # if @current_user.books.empty?
-        #   puts "You have no books checked out".colorize(:red)
-        # end
+        if @current_user.reload.books.empty?
+          puts "You have no books checked out".colorize(:red)
+        end
         all_checkouts
         list
       when "3"
-        all_checkouts
-         puts "Please select index of book you would like to return (1-#{all_checkouts.length})".colorize(:red)
+        if @current_user.reload.books.empty?
+          puts "You have no books checked out".colorize(:red)
+          list
+        else
+         all_checkouts
+         puts "Please select index of book you would like to return (1-#{@current_user.books.length})".colorize(:red)
          index = gets.chomp.to_i
          returned_book = @current_user.return_book(index)
-         puts "You have successfully returned #{returned_book}."
+         puts "You have successfully returned #{returned_book}.".colorize(:green)
+         list
+        end
       when "4"
+        if @current_user.books.empty?
+          puts "You have no books checked out".colorize(:red)
+          list
+        else
+          @current_user.return_all
+          list
+        end
+      when "5"
         exit
       end
   end
 
   def all_checkouts
-    novels = @current_user.books
+    # binding.pry
+    novels = @current_user.reload.books
     novels.each_with_index do |book, index|
       new_index = index + 1
+      # binding.pry
       book.update(index: new_index)
+      # binding.pry
       puts "Book index: #{new_index}"
       show_book(book)
-      # puts "  Checkout date: #{Checkout.find_by(book_id: book.id).checkout_date}"
-      # puts "  Return date: #{Checkout.find_by(book_id: book.id).return_date}"
+      puts "  Checkout date: #{book.checkouts[0].checkout_date}"
+      puts "  Return date: #{book.checkouts[0].return_date}"
       puts "--------------"
     end
   end
-
-
 
   def checkout_option(book)
     book_record = Book.find_by(title: book[:title])
     if book_record && !book_record.available
       unavailable_book = Book.find_by(title: book[:title])
-      puts "Sorry! This book is checked out until #{book_record.checkouts.return_date}".colorize(:red)
+      puts "Sorry! This book is checked out until #{book_record.checkouts[0].return_date}".colorize(:red)
       list
     elsif book_record && book_record.available
       checkout(@current_user, book_record)
+      list
     else
       book_row = create_book(book)
-      puts "This Book is available to checkout! Would you like to check it out? [y,n]".colorize(:green)
+      puts "This Book is available to checkout! Would you like to check it out? (Y/n)".colorize(:green)
       input = gets.chomp
       case input
       when "y"
         checkout(@current_user, book_row)
+        list
       when "n"
         list
       end
@@ -137,6 +153,7 @@ class ApplicationController
     books = result["items"]
     if result["totalItems"] == 0
       puts "Sorry :( We have no record of this book. Please try again..."
+      search_for_book_option
     else
       @book_hashes = []
       book_result = books.each_with_index do |book, index|
@@ -186,10 +203,11 @@ class ApplicationController
   end
 
   def checkout(current_user, book)
+    # binding.pry
     checked_book = Checkout.create(user_id: current_user.id, book_id: book.id, checkout_date: DateTime.now, return_date: DateTime.now + 7)
+    # binding.pry
     checked_book.book.update(available: false)
     puts "You now have #{book.title} checked out!".colorize(:color => :purple, :background => :green)
-    list
   end
 
 end
