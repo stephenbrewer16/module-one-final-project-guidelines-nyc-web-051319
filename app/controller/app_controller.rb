@@ -115,8 +115,6 @@ class ApplicationController
       when "5"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
-      when "6"
-        Book.random_book
     end
   end
 
