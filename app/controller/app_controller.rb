@@ -81,7 +81,7 @@ class ApplicationController
       when "1"
         search_for_book_option
       when "2"
-        if @current_user.books.empty?
+        if @current_user.reload.books.empty?
           puts "You have no books checked out".colorize(:red)
         end
         all_checkouts
