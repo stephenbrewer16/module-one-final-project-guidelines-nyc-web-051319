@@ -18,8 +18,8 @@ class ApplicationController
   end
 
   def welcome
-    puts "Welcome to BookWorm!"
-    puts "What is your name?"
+    puts "Welcome to BookWorm!".colorize(:color => :red, :background => :white)
+    puts "What is your name?".colorize(:green)
     name = gets.chomp.downcase
     if User.find_by(name: name)
       @current_user = User.find_by(name: name)
@@ -33,48 +33,7 @@ class ApplicationController
 
 
   def display_bookworm
-#     puts "
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNXK00KXNWMMXxooooooooocoKWWKxddddddddddx0WMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNKOdddxdddddddxdclOXXNNXNNNKl:doodxO00KK00kxdookXMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWKxoodxkO0KKKK0Okdl;l0XXXNXNXNXo,lO000KNWWWWNX00OkolOW
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNkcdO0000XNWMMWWXK0OOocxKNNXNNXd:x0O0NMMMMMMMMMMWKO0xck
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWxck0OOKWMMMMMMMMMMWXO0x:dXXKKKk:xKkKMMMMMMWKOO0XWMNk0x:
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMOckKkXMMMMMMMN0xddOXWNO0x;coddo;:KOOWMMMMWk;.   .c0W0O0:
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWdcKO0MMMMMMWk;.    'oX0OKkooodolkNO0MMMMWx.       '0KO0:
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWolKO0MMMMMM0'       .d0OKdcoxkxcc00ONMMMWo  'c;.  .xOOO:
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMkcO0ONMMMMMO.  .ckl. lk0k:dXXXN0clK0ONMMMK:.lKx. .cxO0ll
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMXolK0O0XMMMNx'  :xl,:dO0clKXXXXXOcl00O0XWMNOddlccdk0OllK
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMXocO0OO0XWMWXkollldk0k;'ldddddddl,,oO00000KK00000kolxNM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWx,:oxkO00000KKKK0OxocldkxdkK0xlokOdlodxxxkkxxxdoc,dWMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMKcl0xoooddxxxxxxdollxKXNO;.;O0:.'kXNX0kdoooooodk0KclNMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMO:xNNNXKOxlcodddxOKXXXXXKxlxKX0kOXXXXXXXXNX0kKXXNXlcXMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMO:xXNNNNXNkcxXNNXXXXXXXXXXXXXXXXXXXXNXXXXNKl:0XXXO:dWMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMXclKXXNNNNKo:d0XXXXXXXXXXXXXXXXXXXXNNXXXKkl:kXNXOcoXMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM0llOXXXNXXXkolodkOKKXXXXXXXXXXKK0Okxdoollx0XX0dcxNMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMXxlcokKXNXNXKkc.;cclllllccloooooooodxOKXX0xoldKWMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNKkdoodk0XXNd,cxxddooc':OKKXXXXNXK0kdooodONMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWNOoc;:oxkc;oxxxdc;l0XNXXXOolodddxOXWMMMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMKl::lxo;,,lkOKOl;::::lkXNNXXXXx,cKWMMMMMMMMMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNO:. .... ..,cdOKXOddk0XNNNNXX0kc';kWNXKXWMMMMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWx:c. ...... ...,cdk0XXXXK0Oxoc;,''.':;,.:KMMMMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMK:cd' .............',::cc:;'.............'0MMMMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMXlcdl;,;:,...........     .................lNMMMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM0:dklloooc'..........  .  ...............'c:dNMMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMK:oklllllc;..........  .  ...........'::;:od:xWMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMMMMWX0kxxxxxO0XWMMMMMWx:llllll:........... ..  ...........;oooodOclNMMMMMMMMM
-#     MMMMMMMMMMMMMMMMMMMMMMMWXxooodxxxxddooodk0NWMWO:''',,'........... ..  ...........:looodkcoNMMMMMMMMM
-#     MMMMWNKKXWMMMMMMMMMMMMXdcoOKXNNNNXNNXX0kdoodddood;............... .. .............;clllclKMMMMMMMMMM
-#     MWKxooooldXMMMMMMMMMNkco0XXXXNXXXXXXXXXXNXK0OOKXXc..............  .  ..............cddx0NMMMMMMMMMMM
-#     NkcoOXX0l:0MMMMMMMMKockXXXXXXNNXXXXXXXXXNXXXXXXXXl..............  .  .............;KMMMMMMMMMMMMMMMM
-#     d:kXX0oldKWMMMMMMW0cl0XXXXXKOxoodddoodOXNXXXNXXXXx;'............ ..  .............oWMMMMMMMMMMMMMMMM
-#     ;xXXkcoKWMMMMMMMNxcdKXXX0xoooxOKNWNX0xllkXXXXXXXXXKOl'.......... ..  ............,0MMMMMMMMMMMMMMMMM
-#     ;0NKclXMMMMMMMNOllOXXKkoldOXWMMMMMMMMMNkco0XXXXXXXXXX0d:'......  .  ...........;l0WMMMMMMMMMMMMMMMMM
-#     ;ONXoc0WMMMWKxllkKXKxlokXMMMMMMMMMMMMMMMXdcxKXXXXXXXXXXX0kd:..:c:;;,,,,''',;ld0NMMMMMMMMMMMMMMMMMMMM
-#     cl0X0dlodddoodOXX0dlo0WMMMMMMMMMMMMMMMMMMW0oldOKXXNXXXX0kdooxKWMMWWWNNXXKXNWMMMMMMMMMMMMMMMMMMMMMMMM
-#     KockXXKOkOOKXNKkoldKWMMMMMMMMMMMMMMMMMMMMMMW0xdoodddoooodkKWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-#     MNkllxO0KK0OxoookXMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNXKKKKKNWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-#     MMMXd:;;;;;;:o0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-# ".white.on_black
+
 puts "
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNXKKKKXNWMMXkdddddxxxdodKWWKkxkkkxxkkxxkKNMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNK0xxxxxkkxxxxkxlo0XXXXNNXNKdldddkOKKXXXXKKOkxdkNMM
@@ -131,7 +90,7 @@ MMMXxcclcllcld0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
     input = gets.chomp
     case input
     when -> result { result.downcase == "yes" || result.downcase == "y" }
-      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
+      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:green)
       index = gets.chomp.to_i
       if !index.between?(1, 10)
         puts "Please enter a number between 1 and 10".colorize(:red)
@@ -184,7 +143,7 @@ MMMXxcclcllcld0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
           menu
         else
           @current_user.return_all
-          puts "You have successfully returned all books.".colorize(:green)
+          puts "You have successfully returned all your books!"
           menu
         end
       when "5"
@@ -195,9 +154,7 @@ MMMXxcclcllcld0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
       when "6"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
-      when "7"
-        puts Book.most_popular.title
-      end
+    end
   end
 
   def all_checkouts
@@ -263,8 +220,9 @@ MMMXxcclcllcld0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
     end
   end
 
+
   def show_book(book)
-    puts "Title: #{book[:title]}"
+    puts "Title: #{book[:title]}".colorize(:light_blue)
     puts "  Author: #{book[:author]}"
     puts "  Category: #{book[:category]}"
     puts "  Page Count: #{book[:page_count]}"
