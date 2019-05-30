@@ -57,7 +57,7 @@ class ApplicationController
     input = gets.chomp
     case input
     when "y"
-      puts "Please have a look at the menu of search results above and select index number of book you would like to checkout (1-10)"
+      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
       index = gets.chomp.to_i
       book = find_book_by_index(index)
       checkout_option(book)
