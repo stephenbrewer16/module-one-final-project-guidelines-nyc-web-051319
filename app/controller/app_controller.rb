@@ -32,11 +32,7 @@ class ApplicationController
   end
 
   def display_bookworm
-    puts  "               (o)(o)          "
-    puts  "              /     \\         "
-    puts  "             /       |         "
-    puts  "            /   /\\   |        "
-    puts  "        ___/___/__\\__/        "
+    puts  "        ______ ______          "
     puts  "      _/      Y      \\_       "
     puts  "     // ~~ ~~ | ~~ ~  \\\\     "
     puts  "    // ~ ~ ~~ | ~~~ ~~ \\\\    "
@@ -114,9 +110,10 @@ class ApplicationController
           menu
         end
       when "5"
-        random = Book.random_book
-        puts show_book(random)
-        random_checkout(random)
+        random_book = random_search[0]
+        show_book(random_book)
+        new_book = create_book(random_book)
+        confirm_checkout(new_book)
       when "6"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
@@ -125,16 +122,16 @@ class ApplicationController
       end
   end
 
-  def random_checkout(book)
-    if book.available == false
-      puts "Sorry! This book is checked out until #{book.checkouts[0].return_date}".colorize(:red)
-      menu
-    else
-      confirm_checkout(book)
-      checkout(@current_user, book_record)
-      menu
-    end
-  end
+  # def random_checkout(book)
+  #   if book.available == false
+  #     puts "Sorry! This book is checked out until #{book.checkouts[0].return_date}".colorize(:red)
+  #     menu
+  #   else
+  #     confirm_checkout(book)
+  #     checkout(@current_user, book_record)
+  #     menu
+  #   end
+  # end
 
   def all_checkouts
     novels = @current_user.reload.books
@@ -225,7 +222,11 @@ class ApplicationController
       book_hash[:category] = "No category defined for this book"
     end
 
-    book_hash[:title] = title
+    if title
+      book_hash[:title] = title
+    else
+      book_hash[:title] = "No title defined for this book"
+    end
     book_hash[:page_count] = page_count
     book_hash
   end
@@ -242,5 +243,18 @@ class ApplicationController
     puts "You now have #{book.title} checked out!".colorize(:color => :purple, :background => :green)
   end
 
+  def random_search
+    random_letter = ('a'..'z').to_a.sample
+    query = RestClient.get("https://www.googleapis.com/books/v1/volumes?q=#{random_letter}")
+    result = JSON.parse(query)
+    books = result["items"]
+    @book_hashes = []
+    book_result = books.each_with_index do |book, index|
+      new_index = index + 1
+      book_hash = grab_book_info(book, new_index)
+      @book_hashes << book_hash
+    end
+    @book_hashes
+  end
 
 end
