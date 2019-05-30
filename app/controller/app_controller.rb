@@ -120,16 +120,6 @@ class ApplicationController
     end
   end
 
-  # def random_checkout(book)
-  #   if book.available == false
-  #     puts "Sorry! This book is checked out until #{book.checkouts[0].return_date}".colorize(:red)
-  #     menu
-  #   else
-  #     confirm_checkout(book)
-  #     checkout(@current_user, book_record)
-  #     menu
-  #   end
-  # end
 
   def all_checkouts
     novels = @current_user.reload.books
@@ -194,9 +184,6 @@ class ApplicationController
     end
   end
 
-  # def random_book
-  #   find(:books).sample(5)
-  # end
 
   def show_book(book)
     puts "Title: #{book[:title]}"
