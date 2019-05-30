@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   # find the books that are overdue
   def overdue_books
     books = self.checkouts.select do |co|
-      co.return_date < DateTime.now
+      co.return_date < (DateTime.now + 30)
     end
   end
 

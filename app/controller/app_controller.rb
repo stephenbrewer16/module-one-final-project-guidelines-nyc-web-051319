@@ -11,9 +11,8 @@ class ApplicationController
     puts "2. View your checkouts"
     puts "3. Return Book"
     puts "4. Return all Books"
-    puts "5. Logout"
-    puts "6. Exit"
-    puts "7. Overdue books"
+    puts "5. Exit"
+    puts "6. Overdue books"
     task = gets.chomp
     action(task)
   end
@@ -21,12 +20,12 @@ class ApplicationController
   def welcome
     puts "Welcome to BookWorm!"
     puts "What is your name?"
-    name = gets.chomp
-    if User.find_by(name: name.downcase)
-      @current_user = User.find_by(name: name.downcase)
+    name = gets.chomp.downcase
+    if User.find_by(name: name)
+      @current_user = User.find_by(name: name)
       puts "Welcome back #{name}!"
     else
-      @current_user = User.create(name: name.downcase)
+      @current_user = User.create(name: name)
       puts "Welcome to BookWorm #{name}!"
     end
     menu
@@ -107,11 +106,9 @@ class ApplicationController
           menu
         end
       when "5"
-        logout
-      when "6"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
-      when "7"
+      when "6"
         @current_user.overdue_books
       end
   end
@@ -213,9 +210,5 @@ class ApplicationController
     puts "You now have #{book.title} checked out!".colorize(:color => :purple, :background => :green)
   end
 
-  def logout
-    puts "Thanks for visiting #{@current_user.name}!".colorize(:green)
-    run
-  end
 
 end
