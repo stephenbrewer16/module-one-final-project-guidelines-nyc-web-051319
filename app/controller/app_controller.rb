@@ -63,6 +63,9 @@ class ApplicationController
     when -> result { result.downcase == "no" || result.downcase == "n" }
       puts "Please be more specific in your search!".colorize(:green)
       search_for_book_option
+    else
+      puts "Please enter valid input".colorize(:red)
+      search_for_book_option
     end
   end
 
@@ -137,15 +140,22 @@ class ApplicationController
       menu
     else
       book_row = create_book(book)
-      puts "This Book is available to checkout! Would you like to check it out? (Y/n)".colorize(:green)
-      input = gets.chomp
-      case input
-      when -> result { result.downcase == "yes" || result.downcase == "y" }
-        checkout(@current_user, book_row)
-        menu
-      when -> result { result.downcase == "no" || result.downcase == "n" }
-        menu
-      end
+      confirm_checkout(book_row)
+    end
+  end
+
+  def confirm_checkout(book)
+    puts "This Book is available to checkout! Would you like to check it out? (Y/n)".colorize(:green)
+    input = gets.chomp
+    case input
+    when -> result { result.downcase == "yes" || result.downcase == "y" }
+      checkout(@current_user, book)
+      menu
+    when -> result { result.downcase == "no" || result.downcase == "n" }
+      menu
+    else
+      puts "Please enter valid input".colorize(:red)
+      confirm_checkout(book)
     end
   end
 
@@ -154,7 +164,7 @@ class ApplicationController
     result = JSON.parse(query)
     books = result["items"]
     if result["totalItems"] == 0
-      puts "Sorry :( We have no record of this book. Please try again..."
+      puts "Sorry :( We have no record of this book. Please try again...".colorize(:red)
       search_for_book_option
     else
       @book_hashes = []
