@@ -56,7 +56,7 @@ class ApplicationController
     input = gets.chomp
     case input
     when "y"
-      puts "Please select index of book you would like to checkout (1-10)"
+      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)"
       index = gets.chomp.to_i
       book = find_book_by_index(index)
       checkout_option(book)
@@ -100,8 +100,8 @@ class ApplicationController
       book.update(index: new_index)
       puts "Book index: #{new_index}"
       show_book(book)
-      # puts "Checkout date: #{book.checkouts[:checkout_date]}"
-      # puts "Return date: #{book.checkouts[:return_date]}"
+      puts "Checkout date: #{book.checkouts[0].checkout_date}"
+      puts "Return date: #{book.checkouts[0].return_date}"
       puts "--------------"
     end
   end
@@ -110,7 +110,7 @@ class ApplicationController
     book_record = Book.find_by(title: book[:title])
     if book_record && !book_record.available
       unavailable_book = Book.find_by(title: book[:title])
-      puts "Sorry! This book is checked out until #{book_record.checkouts.return_date}".colorize(:red)
+      puts "Sorry! This book is checked out until #{book_record.checkouts[0].return_date}".colorize(:red)
       list
     elsif book_record && book_record.available
       checkout(@current_user, book_record)
