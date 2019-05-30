@@ -23,7 +23,7 @@ class ApplicationController
       @current_user = User.find_by(name: name)
       puts "Welcome back #{name}!"
     else
-      @current_user = User.create(name: name)
+      @current_user = User.create(name: name.downcase)
       puts "Welcome to BookWorm #{name}!"
     end
     list
@@ -55,7 +55,7 @@ class ApplicationController
     input = gets.chomp
     case input
     when "y"
-      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)"
+      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
       index = gets.chomp.to_i
       book = find_book_by_index(index)
       checkout_option(book)
@@ -78,7 +78,7 @@ class ApplicationController
       when "1"
         search_for_book_option
       when "2"
-        if @current_user.reload.books.empty?
+        if @current_user.books.empty?
           puts "You have no books checked out".colorize(:red)
         end
         all_checkouts
