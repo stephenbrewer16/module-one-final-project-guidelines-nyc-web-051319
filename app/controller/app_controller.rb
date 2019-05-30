@@ -58,6 +58,10 @@ class ApplicationController
     when -> result { result.downcase == "yes" || result.downcase == "y" }
       puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
       index = gets.chomp.to_i
+      if !index.between?(1, 10)
+        puts "Please enter a number between 1 and 10".colorize(:red)
+        index = gets.chomp.to_i
+      end
       book = find_book_by_index(index)
       checkout_option(book)
     when -> result { result.downcase == "no" || result.downcase == "n" }
@@ -65,7 +69,7 @@ class ApplicationController
       search_for_book_option
     else
       puts "Please enter valid input".colorize(:red)
-      search_for_book_option
+      confirm_search
     end
   end
 
