@@ -2,14 +2,20 @@ class Book < ActiveRecord::Base
   has_many :checkouts
   has_many :users, through: :checkouts
 
+<<<<<<< HEAD
 def random_book
   find(:all).sample(5)
 end
   # book rating property
+=======
+>>>>>>> 7495a7418c3500259baae362d38c78e669aaf9cc
 
-  # find book with highest rating/ or based on user input
-
-  # find most popular book in the database with most checkouts (top 10 all time etc...)
+  def self.most_popular
+    self.all.max_by do |book|
+      book.users.count
+    end
+    # binding.pry
+  end
 
   # find the longest book based on page_count
 

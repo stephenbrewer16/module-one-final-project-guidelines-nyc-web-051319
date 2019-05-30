@@ -12,7 +12,6 @@ class ApplicationController
     puts "3. Return Book"
     puts "4. Return all Books"
     puts "5. Exit"
-    puts "6. Let me see some random books"
     task = gets.chomp
     action(task)
   end
@@ -56,14 +55,21 @@ class ApplicationController
     puts "Did you find the book you are searching for? (Y/n)".colorize(:color => :blue, :background => :white)
     input = gets.chomp
     case input
-    when "y"
-      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :red)
+    when -> result { result.downcase == "yes" || result.downcase == "y" }
+      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
       index = gets.chomp.to_i
+      if !index.between?(1, 10)
+        puts "Please enter a number between 1 and 10".colorize(:red)
+        index = gets.chomp.to_i
+      end
       book = find_book_by_index(index)
       checkout_option(book)
-    when "n"
+    when -> result { result.downcase == "no" || result.downcase == "n" }
       puts "Please be more specific in your search!".colorize(:green)
       search_for_book_option
+    else
+      puts "Please enter valid input".colorize(:red)
+      confirm_search
     end
   end
 
@@ -138,15 +144,22 @@ class ApplicationController
       menu
     else
       book_row = create_book(book)
-      puts "This Book is available to checkout! Would you like to check it out? (Y/n)".colorize(:green)
-      input = gets.chomp
-      case input
-      when "y"
-        checkout(@current_user, book_row)
-        menu
-      when "n"
-        menu
-      end
+      confirm_checkout(book_row)
+    end
+  end
+
+  def confirm_checkout(book)
+    puts "This Book is available to checkout! Would you like to check it out? (Y/n)".colorize(:green)
+    input = gets.chomp
+    case input
+    when -> result { result.downcase == "yes" || result.downcase == "y" }
+      checkout(@current_user, book)
+      menu
+    when -> result { result.downcase == "no" || result.downcase == "n" }
+      menu
+    else
+      puts "Please enter valid input".colorize(:red)
+      confirm_checkout(book)
     end
   end
 
@@ -155,7 +168,7 @@ class ApplicationController
     result = JSON.parse(query)
     books = result["items"]
     if result["totalItems"] == 0
-      puts "Sorry :( We have no record of this book. Please try again..."
+      puts "Sorry :( We have no record of this book. Please try again...".colorize(:red)
       search_for_book_option
     else
       @book_hashes = []
