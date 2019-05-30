@@ -10,6 +10,10 @@ class Book < ActiveRecord::Base
     # binding.pry
   end
 
+  def self.random_book
+    self.all.sample
+  end
+
   # find the longest book based on page_count
 
   # read book description (would have to add book description as column)

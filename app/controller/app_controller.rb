@@ -11,7 +11,8 @@ class ApplicationController
     puts "2. View your checkouts"
     puts "3. Return Book"
     puts "4. Return all Books"
-    puts "5. Exit"
+    puts "5. Choose a random book for me"
+    puts "6. Exit"
     task = gets.chomp
     action(task)
   end
@@ -113,11 +114,26 @@ class ApplicationController
           menu
         end
       when "5"
+        random = Book.random_book
+        puts show_book(random)
+        random_checkout(random)
+      when "6"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
-      when "6"
+      when "7"
         puts Book.most_popular.title
       end
+  end
+
+  def random_checkout(book)
+    if book.available == false
+      puts "Sorry! This book is checked out until #{book.checkouts[0].return_date}".colorize(:red)
+      menu
+    else
+      confirm_checkout(book)
+      checkout(@current_user, book_record)
+      menu
+    end
   end
 
   def all_checkouts
@@ -215,7 +231,9 @@ class ApplicationController
   end
 
   def create_book(book_hash)
-    Book.create(book_hash)
+    new_book = Book.create(book_hash)
+    new_book.update(available: true)
+    new_book
   end
 
   def checkout(current_user, book)
