@@ -18,8 +18,8 @@ class ApplicationController
   end
 
   def welcome
-    puts "Welcome to BookWorm!"
-    puts "What is your name?"
+    puts "Welcome to BookWorm!".colorize(:color => :red, :background => :white)
+    puts "What is your name?".colorize(:green)
     name = gets.chomp.downcase
     if User.find_by(name: name)
       @current_user = User.find_by(name: name)
@@ -53,7 +53,7 @@ class ApplicationController
     input = gets.chomp
     case input
     when -> result { result.downcase == "yes" || result.downcase == "y" }
-      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
+      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:green)
       index = gets.chomp.to_i
       if !index.between?(1, 10)
         puts "Please enter a number between 1 and 10".colorize(:red)
@@ -186,7 +186,7 @@ class ApplicationController
 
 
   def show_book(book)
-    puts "Title: #{book[:title]}"
+    puts "Title: #{book[:title]}".colorize(:light_blue)
     puts "  Author: #{book[:author]}"
     puts "  Category: #{book[:category]}"
     puts "  Page Count: #{book[:page_count]}"
