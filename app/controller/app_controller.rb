@@ -13,6 +13,7 @@ class ApplicationController
     puts "4. Return all Books"
     puts "5. Logout"
     puts "6. Exit"
+    puts "7. Overdue books"
     task = gets.chomp
     action(task)
   end
@@ -110,6 +111,8 @@ class ApplicationController
       when "6"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
+      when "7"
+        @current_user.overdue_books
       end
   end
 

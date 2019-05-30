@@ -7,6 +7,12 @@ class User < ActiveRecord::Base
   # count how many books he has checked out
 
   # find the books that are overdue
+  def overdue_books
+    books = self.checkouts.select do |co|
+      co.return_date < DateTime.now
+    end
+    binding.pry
+  end
 
   def return_book(index)
      checkouts[index - 1].book.update(available: true)
