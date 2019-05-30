@@ -79,15 +79,17 @@ class ApplicationController
       when "1"
         search_for_book_option
       when "2"
+        # if @current_user.books.empty?
+        #   puts "You have no books checked out".colorize(:red)
+        # end
         all_checkouts
         list
       when "3"
         all_checkouts
-        puts "Please select index of book you would like to return (1-#{all_checkouts.length})".colorize(:red)
-        index = gets.chomp.to_i
-        returned_book = @current_user.return_book(index)
-        puts "You have successfully returned #{returned_book}.".colorize(:green)
-        list
+         puts "Please select index of book you would like to return (1-#{all_checkouts.length})".colorize(:red)
+         index = gets.chomp.to_i
+         returned_book = @current_user.return_book(index)
+         puts "You have successfully returned #{returned_book}."
       when "4"
         exit
       end
@@ -105,6 +107,8 @@ class ApplicationController
       puts "--------------"
     end
   end
+
+
 
   def checkout_option(book)
     book_record = Book.find_by(title: book[:title])
