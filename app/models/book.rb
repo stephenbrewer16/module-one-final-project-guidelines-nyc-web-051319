@@ -2,6 +2,9 @@ class Book < ActiveRecord::Base
   has_many :checkouts
   has_many :users, through: :checkouts
 
+def random_book
+  find(:all).sample(5)
+end
   # book rating property
 
   # find book with highest rating/ or based on user input

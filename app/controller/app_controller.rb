@@ -12,7 +12,7 @@ class ApplicationController
     puts "3. Return Book"
     puts "4. Return all Books"
     puts "5. Exit"
-    puts "6. Overdue books"
+    puts "6. Let me see some random books"
     task = gets.chomp
     action(task)
   end
@@ -57,7 +57,7 @@ class ApplicationController
     input = gets.chomp
     case input
     when "y"
-      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :purple)
+      puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:color => :green, :background => :red)
       index = gets.chomp.to_i
       book = find_book_by_index(index)
       checkout_option(book)
@@ -80,13 +80,13 @@ class ApplicationController
       when "1"
         search_for_book_option
       when "2"
-        if @current_user.books.empty?
+        if @current_user.reload.books.empty?
           puts "You have no books checked out".colorize(:red)
         end
         all_checkouts
         menu
       when "3"
-        if @current_user.books.empty?
+        if @current_user.reload.books.empty?
           puts "You have no books checked out".colorize(:red)
           menu
         else
@@ -103,14 +103,15 @@ class ApplicationController
           menu
         else
           @current_user.return_all
+          puts "You have successfully returned all your books!"
           menu
         end
       when "5"
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
       when "6"
-        @current_user.overdue_books
-      end
+        Book.random_book
+    end
   end
 
   def all_checkouts
@@ -168,6 +169,10 @@ class ApplicationController
       end
     end
   end
+
+  # def random_book
+  #   find(:books).sample(5)
+  # end
 
   def show_book(book)
     puts "Title: #{book[:title]}"
