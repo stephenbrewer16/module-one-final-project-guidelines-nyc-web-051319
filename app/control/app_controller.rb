@@ -1,4 +1,4 @@
-class ApplicationController
+class Application
 
   def run
     system "clear"
@@ -118,6 +118,7 @@ class ApplicationController
       puts "Sorry! This book is checked out until #{book_record.checkouts[0].return_date}".colorize(:red)
       menu
     elsif book_record && book_record.available
+      confirm_checkout(book_record)
       Checkout.checkout(@current_user, book_record)
       menu
     else
