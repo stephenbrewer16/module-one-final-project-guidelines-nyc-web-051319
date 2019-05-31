@@ -157,6 +157,7 @@ MMMXxcclcllcld0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
     end
   end
 
+
   def all_checkouts
     novels = @current_user.reload.books
     novels.each_with_index do |book, index|
@@ -269,8 +270,7 @@ MMMXxcclcllcld0WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
   end
 
   def random_search
-    random_letter = ('a'..'z').to_a.sample
-    query = RestClient.get("https://www.googleapis.com/books/v1/volumes?q=#{random_letter}")
+    query = RestClient.get("https://www.googleapis.com/books/v1/volumes?q=#{RandomWord.nouns.next}")
     result = JSON.parse(query)
     books = result["items"]
     @book_hashes = []

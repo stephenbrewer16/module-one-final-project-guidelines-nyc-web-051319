@@ -5,6 +5,7 @@ require 'rest-client'
 require 'JSON'
 require 'pry'
 require 'date'
+require 'random_word'
 
 
 ApplicationController.new.run

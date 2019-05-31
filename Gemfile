@@ -9,3 +9,4 @@ gem "rest-client"
 gem "json"
 gem "colorize"
 gem 'rake'
+gem 'random_word'
