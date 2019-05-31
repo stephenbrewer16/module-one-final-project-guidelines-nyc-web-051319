@@ -7,20 +7,25 @@ class Application
   end
 
   def menu
-    puts "What would you like to do?"
+    puts"*********************************"
+    puts "What would you like to do?".colorize(:green)
+    puts"*********************************"
     puts "1. Search"
     puts "2. View your checkouts"
     puts "3. Return Book"
     puts "4. Return all Books"
     puts "5. Choose a random book for me"
     puts "6. Exit"
+    puts"*********************************"
     task = gets.chomp
     action(task)
   end
 
   def welcome
+    puts"*********************************"
     puts "Welcome to BookWorm!".colorize(:color => :red, :background => :white)
     puts "What is your name?".colorize(:green)
+    puts"*********************************"
     name = gets.chomp.downcase
     if User.find_by(name: name)
       @current_user = User.find_by(name: name)
@@ -40,13 +45,17 @@ class Application
         search_for_book_option
       when "2"
         if @current_user.reload.books.empty?
+          puts"*********************************"
           puts "You have no books checked out".colorize(:red)
+          puts"*********************************"
         end
         all_checkouts
         menu
       when "3"
         if @current_user.reload.books.empty?
+          puts"*********************************"
           puts "You have no books checked out".colorize(:red)
+          puts"*********************************"
           menu
         else
          all_checkouts
@@ -54,17 +63,23 @@ class Application
          index = gets.chomp.to_i
          returned_book = @current_user.return_book(index)
          system "clear"
+         puts"*********************************"
          puts "You have successfully returned #{returned_book}.".colorize(:green)
+         puts"*********************************"
          menu
         end
       when "4"
         if @current_user.books.empty?
+          puts"*********************************"
           puts "You have no books checked out".colorize(:red)
+          puts"*********************************"
           menu
         else
           @current_user.return_all
           system "clear"
+          puts"***********************************************"
           puts "You have successfully returned all your books!".colorize(:green)
+          puts"***********************************************"
           menu
         end
       when "5"
@@ -77,13 +92,17 @@ class Application
         puts "See you later #{@current_user.name}!".colorize(:green)
         exit
       else
+        puts"********************************************"
         puts "Please enter one of the above index numbers".colorize(:red)
+        puts"********************************************"
         menu
     end
   end
 
   def search_for_book_option
+    puts"*********************************"
     puts "What book are you looking for?"
+    puts"*********************************"
     book_query = gets.chomp
     book = search_for_book(book_query)
     confirm_search
@@ -94,16 +113,22 @@ class Application
     input = gets.chomp
     case input
     when -> result { result.downcase == "yes" || result.downcase == "y" }
+      puts"************************************************************************************************************************"
       puts "Please have a look at the list of search results above and select index number of book you would like to checkout (1-10)".colorize(:green)
+      puts"************************************************************************************************************************"
       index = gets.chomp.to_i
       if !index.between?(1, 10)
+        puts"***************************************"
         puts "Please enter a number between 1 and 10".colorize(:red)
+        puts"***************************************"
         index = gets.chomp.to_i
       end
       book = find_book_by_index(index)
       checkout_option(book)
     when -> result { result.downcase == "no" || result.downcase == "n" }
+      puts"***************************************"
       puts "Please be more specific in your search!".colorize(:green)
+      puts"***************************************"
       search_for_book_option
     else
       puts "Please enter valid input".colorize(:red)
@@ -115,7 +140,9 @@ class Application
     book_record = Book.find_by(title: book[:title])
     if book_record && !book_record.available
       unavailable_book = Book.find_by(title: book[:title])
+      puts"***************************************"
       puts "Sorry! This book is checked out until #{book_record.checkouts[0].return_date}".colorize(:red)
+      puts"***************************************"
       menu
     elsif book_record && book_record.available
       confirm_checkout(book_record)
@@ -128,7 +155,9 @@ class Application
   end
 
   def confirm_checkout(book)
+    puts"**************************************************************************"
     puts "This Book is available to checkout! Would you like to check it out? (Y/n)".colorize(:green)
+    puts"**************************************************************************"
     input = gets.chomp
     case input
     when -> result { result.downcase == "yes" || result.downcase == "y" }
@@ -151,7 +180,9 @@ class Application
       show_book(book)
       puts "  Checkout date: #{book.checkouts[0].checkout_date}"
       if (book.checkouts[0].return_date < DateTime.now)
+        puts"**********************************************************"
         puts "  This Book is overdue! Please return as soon as possible".red
+        puts"**********************************************************"
       else
         puts "  Return date: #{book.checkouts[0].return_date}"
         puts "--------------"
